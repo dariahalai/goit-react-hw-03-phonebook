@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { nanoid } from 'nanoid';
+import { Section,Title } from './App.styled';
+
 import Form from './Form';
 import ContactsList from './ContactsList';
 import Filter from './Filter';
@@ -16,13 +19,16 @@ export class App extends Component {
   };
 
   addNewContact = data => {
+    const { contacts } = this.state;
     const newContact = {
       id: nanoid(),
       ...data,
     };
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newContact],
-    }));
+    contacts.some(({ name }) => name === data.name)
+      ? Notify.warning(`${data.name} is already in contacts`)
+      : this.setState(prevState => ({
+          contacts: [...prevState.contacts, newContact],
+        }));
   };
 
   deleteContact = id => {
@@ -47,12 +53,20 @@ export class App extends Component {
     const visibleContacts = this.getVisibleContacts();
     return (
       <>
-        <h1>Phonebook</h1>
-        <Form addNewContact={this.addNewContact} />
-        <h2>Contacts</h2>
-        <Filter value={filter} onChange={this.changeFilter} />
-        <ContactsList contacts={visibleContacts} deleteContact={this.deleteContact}/>
+        <Section>
+          <Title>Phonebook</Title>
+          <Form addNewContact={this.addNewContact} />
+        </Section>
+        <Section>
+          <Title>Contacts</Title>
+          <Filter value={filter} onChange={this.changeFilter} />
+          <ContactsList
+            contacts={visibleContacts}
+            deleteContact={this.deleteContact}
+          />
+        </Section>
       </>
     );
   }
 }
+
