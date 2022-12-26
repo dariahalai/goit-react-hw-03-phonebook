@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { Label, Input, Button, FormContainer } from './Form.styled';
-import PropTypes from 'prop-types';
-
 
 class Form extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
   state = {
     name: '',
     number: '',
@@ -41,8 +36,8 @@ class Form extends Component {
             />
           </Label>
           <Label>
-            Number 
-            <Input 
+            Number
+            <Input
               onChange={this.handleChange}
               type="tel"
               name="number"
